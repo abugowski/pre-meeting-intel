@@ -4,9 +4,9 @@ from src.intelligence.models import CompanyProfile
 
 def test_create_company_profile():
     profile = CompanyProfile(
-        name="  Acme Corporation  ",
+        name="Acme Corporation",
         industry="Manufacturing",
-        country="USA",
+        country="PL",
         notes="Leading manufacturer of widgets.",
     )
 
@@ -18,7 +18,7 @@ def empty_name_raises_error():
     with pytest.raises(ValueError):
         CompanyProfile(
             name="",
-            industry="Technology",
+            industry="  Technology. ",
             country="USA",
             notes="Innovative tech company.",
         )
@@ -26,16 +26,22 @@ def empty_name_raises_error():
 
 def test_to_dict_returns_correct_data():
     profile = CompanyProfile(
-        "Ignitis", "Energy", "Lithuania", "Leading energy company."
+        name="Ignitis",
+        industry="Energy",
+        country="LT",
+        notes="Leading energy company.",
     )
     result = profile.to_dict()
     assert result["name"] == "Ignitis"
-    assert result["country"] == "Lithuania"
+    assert result["country"] == "LT"
 
 
 def test_summary_contains_company_name():
     profile = CompanyProfile(
-        "Ignitis", "Energy", "Lithuania", "Leading energy company."
+        name="Ignitis",
+        industry="Energy",
+        country="LT",
+        notes="Leading energy company.",
     )
     summary = profile.summary()
     assert isinstance(summary, str)

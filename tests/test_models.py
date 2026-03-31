@@ -1,10 +1,11 @@
 import pytest
+from pydantic import ValidationError
 from src.intelligence.models import CompanyProfile
 
 
 def test_create_company_profile():
     profile = CompanyProfile(
-        name="Acme Corporation",
+        name="  Acme Corporation",
         industry="Manufacturing",
         country="PL",
         notes="Leading manufacturer of widgets.",
@@ -12,10 +13,12 @@ def test_create_company_profile():
 
     assert profile.name == "Acme Corporation"
     assert profile.industry == "Manufacturing"
+    assert profile.country == "PL"
+    assert profile.notes == "Leading manufacturer of widgets."
 
 
-def empty_name_raises_error():
-    with pytest.raises(ValueError):
+def test_empty_name_raises_error():
+    with pytest.raises(ValidationError):
         CompanyProfile(
             name="",
             industry="  Technology. ",
@@ -26,23 +29,23 @@ def empty_name_raises_error():
 
 def test_to_dict_returns_correct_data():
     profile = CompanyProfile(
-        name="Ignitis",
+        name=" PowerTech",
         industry="Energy",
-        country="LT",
+        country="PL",
         notes="Leading energy company.",
     )
     result = profile.to_dict()
-    assert result["name"] == "Ignitis"
-    assert result["country"] == "LT"
+    assert result["name"] == "PowerTech"
+    assert result["country"] == "PL"
 
 
 def test_summary_contains_company_name():
     profile = CompanyProfile(
-        name="Ignitis",
+        name="Alpha Energy",
         industry="Energy",
-        country="LT",
+        country="PL",
         notes="Leading energy company.",
     )
     summary = profile.summary()
     assert isinstance(summary, str)
-    assert "Ignitis" in summary
+    assert "Alpha Energy" in summary

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, field_validator
 
 
 class Contact(BaseModel):
@@ -13,6 +13,11 @@ class Contact(BaseModel):
         if "@" not in value:
             raise ValueError("Invalid email address")
         return value
+
+    @field_validator("first_name", "last_name", "role", "email")
+    @classmethod
+    def validate_whitespace(cls, value: str) -> str:
+        return value.strip()
 
     def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"

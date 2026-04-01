@@ -11,7 +11,8 @@ def clean_text(text: str) -> str:
         str: The cleaned text.
     """
 
-    logger.warning("Empty text passed to clean_text")
+    if not text.strip():
+        logger.warning(f"Empty text passed to clean_text: {text}")
 
     return " ".join(text.split())
 

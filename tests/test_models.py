@@ -5,10 +5,10 @@ from src.intelligence.models import CompanyProfile
 
 def test_create_company_profile():
     profile = CompanyProfile(
-        name="  Acme Corporation",
-        industry="Manufacturing",
+        name="  Acme   Corporation",
+        industry="Manufacturing   ",
         country="PL",
-        notes="Leading manufacturer of widgets.",
+        notes="Leading   manufacturer   of widgets.",
     )
 
     assert profile.name == "Acme Corporation"

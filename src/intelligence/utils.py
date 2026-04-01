@@ -1,3 +1,6 @@
+from loguru import logger
+
+
 def clean_text(text: str) -> str:
     """
     Clean the input text by removing extra whitespace and special characters.
@@ -7,6 +10,8 @@ def clean_text(text: str) -> str:
     Returns:
         str: The cleaned text.
     """
+
+    logger.warning("Empty text passed to clean_text")
 
     return " ".join(text.split())
 

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, field_validator
 from src.intelligence.utils import clean_text
+from loguru import logger
 
 
 class Contact(BaseModel):
@@ -7,6 +8,9 @@ class Contact(BaseModel):
     last_name: str
     role: str
     email: str
+
+    def model_post_init(self, __context):
+        logger.info(f"Contact created: {self.full_name()}")
 
     @field_validator("email")
     @classmethod

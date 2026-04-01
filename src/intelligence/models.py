@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, field_validator
 from src.intelligence.utils import clean_text
+from loguru import logger
 
 
 class CompanyProfile(BaseModel):
@@ -7,6 +8,9 @@ class CompanyProfile(BaseModel):
     industry: str
     country: str = Field(min_length=2, max_length=2)
     notes: str
+
+    def model_post_init(self, __context):
+        logger.info(f"Company Profile created: {self.name}")
 
     @field_validator("name", "industry", "country", "notes")
     @classmethod

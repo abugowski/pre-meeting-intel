@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field, field_validator
+from src.intelligence.utils import clean_text
 
 
 class CompanyProfile(BaseModel):
@@ -10,7 +11,7 @@ class CompanyProfile(BaseModel):
     @field_validator("name", "industry", "country", "notes")
     @classmethod
     def stripe_whitespace(cls, value: str) -> str:
-        return value.strip()
+        return clean_text(value)
 
     def to_dict(self):
         return {

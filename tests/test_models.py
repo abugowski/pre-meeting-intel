@@ -49,3 +49,36 @@ def test_summary_contains_company_name():
     summary = profile.summary()
     assert isinstance(summary, str)
     assert "Alpha Energy" in summary
+
+
+def test_summary_returns_correct_strings():
+    profile = CompanyProfile(
+        name="Beta Tech",
+        industry="Technology",
+        country="US",
+        notes="AI startup focused on machine learning.",
+    )
+    assert profile.summary() == (
+        "Company: Beta Tech\n"
+        "Industry: Technology\n"
+        "Country: US\n"
+        "Notes: AI startup focused on machine learning.\n"
+    )
+
+
+def test_to_dict_contains_all_fields():
+    profile = CompanyProfile(
+        name="Gamma Solutions",
+        industry="Consulting",
+        country="UK",
+        notes="Provides business consulting services.",
+    )
+    result = profile.to_dict()
+    assert "name" in result
+    assert "industry" in result
+    assert "country" in result
+    assert "notes" in result
+    assert result["name"] == "Gamma Solutions"
+    assert result["industry"] == "Consulting"
+    assert result["country"] == "UK"
+    assert result["notes"] == "Provides business consulting services."

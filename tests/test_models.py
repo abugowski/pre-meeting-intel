@@ -88,3 +88,12 @@ def test_to_dict_contains_all_fields() -> None:
     assert result["industry"] == "Consulting"
     assert result["country"] == "UK"
     assert result["notes"] == "Provides business consulting services."
+
+
+@pytest.mark.asyncio
+async def test_create_company_profile_with_fetch() -> None:
+    """Test creating a CompanyProfile instance using the create method with async fetch."""
+    profile = await CompanyProfile.create(
+        name="Delta Corp", industry="Finance", country="EE"
+    )
+    assert "Tallinn" in profile.notes

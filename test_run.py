@@ -9,6 +9,9 @@
 import src.intelligence.config  # noqa: F401
 import asyncio
 from src.intelligence.fetcher import fetch_country_data
+from src.intelligence.models import CompanyProfile
 
-result = asyncio.run(fetch_country_data("PL"))
+result = asyncio.run(
+    CompanyProfile.create(name="Example Corp", industry="Technology", country="LT")
+)
 print(result)

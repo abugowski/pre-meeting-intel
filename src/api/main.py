@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from src.api.schemas import CompanyRequest, CompanyResponse
 from src.intelligence.models import CompanyProfile
+from loguru import logger
+from src.intelligence.exceptions import APIConnectionError
 
 app = FastAPI()
 
@@ -14,9 +16,18 @@ async def health():
 @app.post("/company")
 async def post_company(request: CompanyRequest) -> CompanyResponse:
     """Get information about a company by name."""
-    profile = await CompanyProfile.create(
-        name=request.name, industry=request.industry, country=request.country
-    )
+    if request.name == "":
+        raise HTTPException(status_code=400, detail="Company name cannot be empty")
+
+    try:
+        profile = await CompanyProfile.create(
+            name=request.name, industry=request.industry, country=request.country
+        )
+    except APIConnectionError:
+        raise HTTPException(status_code=503, detail="External API is unavailable")
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
     return CompanyResponse(
         name=profile.name,

@@ -3,7 +3,9 @@ from src.api.schemas import CompanyRequest, CompanyResponse
 from src.intelligence.models import CompanyProfile
 from loguru import logger
 from src.intelligence.exceptions import APIConnectionError
+from src.api.config import Settings
 
+settings = Settings()
 app = FastAPI()
 
 

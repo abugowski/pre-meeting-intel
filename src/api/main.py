@@ -5,6 +5,11 @@ from loguru import logger
 from src.intelligence.exceptions import APIConnectionError
 from src.api.config import Settings
 
+# Logur and log configuration
+
+logger.add("logs/app.log", rotation="1 MB", retention="10 days")
+
+
 settings = Settings()
 app = FastAPI()
 

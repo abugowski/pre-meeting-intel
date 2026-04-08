@@ -6,7 +6,7 @@
 #     first_name="Jan", last_name="Kowalski", role="TCO", email="jan.kowalski@example.com"
 
 
-import src.intelligence.config  # noqa: F401
+import intelligence.config_orig  # noqa: F401
 import asyncio
 from src.intelligence.fetcher import fetch_country_data
 from src.intelligence.models import CompanyProfile

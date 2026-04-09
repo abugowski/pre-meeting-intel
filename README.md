@@ -20,3 +20,22 @@ helps prepare for a first client meeting by automatically generating a briefing.
 ## GitHub
 
 github.com/abugowski/fde-portfolio
+
+## Live Demo
+
+API is deployed and available at:
+
+🚀 **Production URL:** https://pre-meeting-intel.railway.app/
+
+### Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Check API status |
+| `/company` | POST | Generate company profile |
+
+### Test the API
+
+```bash
+curl https://https://pre-meeting-intel.railway.app/health
+```

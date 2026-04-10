@@ -6,12 +6,17 @@
 #     first_name="Jan", last_name="Kowalski", role="TCO", email="jan.kowalski@example.com"
 
 
-import intelligence.config_orig  # noqa: F401
+# import intelligence.config_orig  # noqa: F401
 import asyncio
-from src.intelligence.fetcher import fetch_country_data
-from src.intelligence.models import CompanyProfile
+# from src.intelligence.fetcher import fetch_country_data
+# from src.intelligence.models import CompanyProfile
 
-result = asyncio.run(
-    CompanyProfile.create(name="Example Corp", industry="Technology", country="LT")
-)
+# result = asyncio.run(
+#     CompanyProfile.create(name="Example Corp", industry="Technology", country="LT")
+# )
+# print(result)
+
+from src.intelligence.briefing import generate_briefing
+
+result = asyncio.run(generate_briefing("Orlen"))
 print(result)

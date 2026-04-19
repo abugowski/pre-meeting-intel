@@ -1,6 +1,6 @@
 from anthropic import AsyncAnthropic
 from pydantic import BaseModel
-from src.intelligence.prompts import BRIEFING_SYSTEM_PROMPT
+from src.intelligence.prompts import BRIEFING_SYSTEM_PROMPT, BRIEFING_USER_PROMPT
 
 
 class BriefingResponse(BaseModel):
@@ -34,7 +34,7 @@ async def generate_briefing(company_name: str) -> BriefingResponse:
         messages=[
             {
                 "role": "user",
-                "content": f"Generate a briefing for the company {company_name} in 3 sentences.",
+                "content": BRIEFING_USER_PROMPT.format(company_name=company_name),
             }
         ],
         system=BRIEFING_SYSTEM_PROMPT,

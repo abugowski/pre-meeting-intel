@@ -11,8 +11,12 @@ async def test_generate_briefing():
         mock_anthropic.return_value = mock_instance
 
         mock_response = MagicMock()
-        mock_response.content[0].text = "This is a briefing for the company Orlen."
-        mock_instance.messages.create = AsyncMock(return_value=mock_response)
+        # mock_response.content[0].text = "This is a briefing for the company Orlen."
+        # mock_instance.messages.create = AsyncMock(return_value=mock_response)
+        mock_response.parsed_output.company_overview = (
+            "This is a briefing for the company Orlen."
+        )
+        mock_instance.messages.parse = AsyncMock(return_value=mock_response)
 
         result = await generate_briefing("Orlen")
-        assert result == "This is a briefing for the company Orlen."
+        assert result.company_overview == "This is a briefing for the company Orlen."

@@ -11,7 +11,7 @@ class BriefingResponse(BaseModel):
     company_overview: str
     strategic_priorities: list[str]
     company_values: list[str]
-    cio_profile: str
+    person_profile: str
     current_challenges: list[str]
     industry_context: list[str]
     opportunities: list[str]

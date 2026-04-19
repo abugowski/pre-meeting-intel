@@ -12,3 +12,4 @@ wheels/
 .venv/
 .env
 logs/
+src/intelligence/prompts.py

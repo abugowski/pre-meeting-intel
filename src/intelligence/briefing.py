@@ -19,7 +19,13 @@ class BriefingResponse(BaseModel):
     risk_flags: list[str]
 
 
-async def generate_briefing(company_name: str) -> BriefingResponse:
+async def generate_briefing(
+    company_name: str,
+    person_name: str,
+    person_bio: str | None = None,
+    industry: str | None = None,
+    technology_focus: str | None = None,
+) -> BriefingResponse:
     """
     Generate a briefing for the given company name.
 

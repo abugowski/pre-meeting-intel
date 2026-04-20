@@ -23,7 +23,7 @@ class BriefingRequest(BaseModel):
     """Represents a request to generate a pre-meeting briefing for a company."""
 
     company_name: str
-    person_name: str
+    person_name: str | None = None
     person_bio: str | None = None
     industry: str | None = None
     technology_focus: str | None = None

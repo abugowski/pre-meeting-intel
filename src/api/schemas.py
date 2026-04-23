@@ -1,3 +1,4 @@
+import re
 from pydantic import BaseModel, Field
 
 
@@ -23,7 +24,11 @@ class BriefingRequest(BaseModel):
     """Represents a request to generate a pre-meeting briefing for a company."""
 
     company_name: str
-    person_name: str | None = None
-    person_bio: str | None = None
     industry: str | None = None
     technology_focus: str | None = None
+
+class PersonaBreifingRequest(BaseModel):
+    """Represents a request to generate a pre-meeting briefing for a person."""
+    name: str
+    position: str | None = None
+    bio: str | None = None

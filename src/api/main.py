@@ -1,9 +1,11 @@
 from fastapi import FastAPI, HTTPException
-from src.api.schemas import CompanyRequest, CompanyResponse
+from src.api.schemas import BriefingRequest, CompanyRequest, CompanyResponse, PersonaBreifingRequest
 from src.intelligence.models import CompanyProfile
+from src.intelligence.briefing import generate_briefing, generate_persona_briefing, BriefingResponse, PersonaBriefingResponse
 from loguru import logger
 from src.intelligence.exceptions import APIConnectionError
 from src.api.config import Settings
+from dotenv import load_dotenv
 
 # Logur and log configuration
 
@@ -12,6 +14,7 @@ logger.add("logs/app.log", rotation="1 MB", retention="10 days")
 
 settings = Settings()
 app = FastAPI()
+load_dotenv()
 
 
 @app.get("/health")
@@ -42,4 +45,62 @@ async def post_company(request: CompanyRequest) -> CompanyResponse:
         industry=profile.industry,
         notes=profile.notes,
         summary=profile.summary(),
+    )
+
+@app.post("/briefing")
+async def post_briefing(request: BriefingRequest) -> BriefingResponse:
+    """Generate a pre-meeting briefing for a company."""
+    if request.company_name == "":
+        raise HTTPException(status_code=400, detail="Company name cannot be empty")
+    try:
+        briefing = await generate_briefing(
+            company_name=request.company_name,
+            industry=request.industry,
+            technology_focus=request.technology_focus,
+        )
+    except APIConnectionError:
+        raise HTTPException(status_code=503, detail="External API is unavailable")
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+    return BriefingResponse(
+        company_overview=briefing.company_overview,
+        strategic_priorities=briefing.strategic_priorities,
+        company_values=briefing.company_values,
+        target_personas=briefing.target_personas,
+        current_challenges=briefing.current_challenges,
+        industry_context=briefing.industry_context,
+        opportunities=briefing.opportunities,
+    )
+
+@app.post("/persona-briefing")
+async def post_persona_briefing(request: PersonaBreifingRequest) -> PersonaBriefingResponse:
+    """
+    Generate a persona-based briefing for the given persona.
+    Args:
+        request (PersonaBreifingRequest): The request object containing the persona details.
+    Returns:
+        PersonaBreifingResponse: The response object containing the generated persona-based briefing.
+    """
+
+    if request.name == "":
+        raise HTTPException(status_code=400, detail="Persona name cannot be empty")
+    try:
+        persona = await generate_persona_briefing(
+            name = request.name,
+            position = request.position,
+            bio = request.bio,
+        )
+    except APIConnectionError:
+        raise HTTPException(status_code=503, detail="External API is unavailable")
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+    return PersonaBriefingResponse(
+        persona_overview=persona.persona_overview,
+        strategic_priorities=persona.strategic_priorities,
+        talking_points=persona.talking_points,
+        risk_flags=persona.risk_flags
     )

@@ -4,7 +4,7 @@ from src.intelligence.models import CompanyProfile
 from src.intelligence.briefing import generate_briefing, generate_persona_briefing, BriefingResponse, PersonaBriefingResponse
 from loguru import logger
 from src.intelligence.exceptions import APIConnectionError
-from src.api.config import Settings
+from src.api.config import settings
 from dotenv import load_dotenv
 
 # Logur and log configuration
@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 logger.add("logs/app.log", rotation="1 MB", retention="10 days")
 
 
-settings = Settings()
 app = FastAPI()
 load_dotenv()
 

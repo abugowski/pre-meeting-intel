@@ -1,7 +1,6 @@
 from anthropic import AsyncAnthropic
 from pydantic import BaseModel
-from src.intelligence.prompts import BRIEFING_SYSTEM_PROMPT, BRIEFING_USER_PROMPT, BRIEFING_USER_INDUSTRY_PROMPT, BRIEFING_USER_BIO_PROMPT, BRIEFING_USER_TECHNOLOGY_PROMPT, BRIEFING_USER_PERSON_PROMPT, BRIEFING_USER_NO_PERSON_PROMPT
-
+from src.api.config import settings
 
 class BriefingResponse(BaseModel):
     """
@@ -40,11 +39,11 @@ async def generate_briefing(
     # model = "claude-sonnet-4-6"
     model = "claude-haiku-4-5"
 
-    prompt = BRIEFING_USER_PROMPT.format(company_name=company_name)
+    prompt = settings.briefing_user_prompt.format(company_name=company_name)
     if industry:
-        prompt += BRIEFING_USER_INDUSTRY_PROMPT.format(industry=industry)
+        prompt += settings.briefing_user_industry_prompt.format(industry=industry)
     if technology_focus:
-        prompt += BRIEFING_USER_TECHNOLOGY_PROMPT.format(technology_focus=technology_focus, company_name=company_name)
+        prompt += settings.briefing_user_technology_prompt.format(technology_focus=technology_focus, company_name=company_name)
     
 
     message = await client.messages.parse(
@@ -56,7 +55,7 @@ async def generate_briefing(
                 "content": prompt,
             }
         ],
-        system=BRIEFING_SYSTEM_PROMPT,
+        system=settings.briefing_system_prompt,
         output_format=BriefingResponse,
     )
 
@@ -80,9 +79,9 @@ async def generate_persona_briefing(
     # model = "claude-sonnet-4-6"
     model = "claude-haiku-4-5"
 
-    prompt = BRIEFING_USER_PERSON_PROMPT.format(name=name)
+    prompt = settings.briefing_user_person_prompt.format(name=name)
     if bio:
-        prompt += BRIEFING_USER_BIO_PROMPT.format(bio=bio)
+        prompt += settings.briefing_user_bio_prompt.format(bio=bio)
 
     message = await client.messages.parse(
         model=model,
@@ -93,7 +92,7 @@ async def generate_persona_briefing(
                 "content": prompt,
             }
         ],
-        system=BRIEFING_SYSTEM_PROMPT,
+        system=settings.briefing_system_prompt,
         output_format=PersonaBriefingResponse,
     )
     return message.parsed_output

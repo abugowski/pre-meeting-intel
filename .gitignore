@@ -14,3 +14,5 @@ wheels/
 logs/
 src/intelligence/prompts.py
 convert_prompts.py
+.DS_Store
+*/.DS_Store

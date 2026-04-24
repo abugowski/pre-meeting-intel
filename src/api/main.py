@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException
+from starlette.responses import StreamingResponse
 from src.api.schemas import BriefingRequest, CompanyRequest, CompanyResponse, PersonaBreifingRequest
 from src.intelligence.models import CompanyProfile
-from src.intelligence.briefing import generate_briefing, generate_persona_briefing, BriefingResponse, PersonaBriefingResponse
+from src.intelligence.briefing import generate_briefing, generate_persona_briefing, stream_briefing, BriefingResponse, PersonaBriefingResponse
 from loguru import logger
 from src.intelligence.exceptions import APIConnectionError
 from src.api.config import settings
@@ -103,3 +104,31 @@ async def post_persona_briefing(request: PersonaBreifingRequest) -> PersonaBrief
         talking_points=persona.talking_points,
         risk_flags=persona.risk_flags
     )
+
+@app.post("/briefing/stream")
+async def post_stream_briefing(request: BriefingRequest) -> StreamingResponse:
+    """
+    Stream a briefing based on the provided request.
+    """
+    if request.company_name == "":
+        raise HTTPException(status_code=400, detail="Company name cannot be empty")
+    try:
+        return StreamingResponse(
+            stream_briefing(
+                company_name=request.company_name,
+                industry=request.industry,
+                technology_focus=request.technology_focus,
+            )
+        )
+    except APIConnectionError:
+        raise HTTPException(status_code=503, detail="External API is unavailable")
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+    # return StreamingResponse(
+    #     company_name=briefing.company_name,
+    #     industry=briefing.industry,
+    #     technology_focus=briefing.technology_focus,
+    # )
+

@@ -96,3 +96,38 @@ async def generate_persona_briefing(
         output_format=PersonaBriefingResponse,
     )
     return message.parsed_output
+
+async def stream_briefing(
+    company_name: str,
+    industry: str | None = None,
+    technology_focus: str | None = None,
+    ):
+    """
+    Generate a briefing for the given company name.
+
+    Args:
+        company_name (str): The name of the company to generate a briefing for."""
+
+    client = AsyncAnthropic()
+    # model = "claude-sonnet-4-6"
+    model = "claude-haiku-4-5"
+
+    prompt = settings.briefing_user_prompt.format(company_name=company_name)
+    if industry:
+        prompt += settings.briefing_user_industry_prompt.format(industry=industry)
+    if technology_focus:
+        prompt += settings.briefing_user_technology_prompt.format(technology_focus=technology_focus, company_name=company_name)
+     
+    async with client.messages.stream(
+        model=model,
+        max_tokens=4000,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        system=settings.briefing_system_prompt,
+    ) as stream:
+        async for message in stream.text_stream:
+            yield message

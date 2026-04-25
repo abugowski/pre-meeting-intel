@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 logger.add("logs/app.log", rotation="1 MB", retention="10 days")
 
 
-app = FastAPI()
+app = FastAPI(docs_url="/docs", redoc_url="/redoc")
 load_dotenv()
 
 

@@ -1,6 +1,11 @@
 import pytest
 from unittest.mock import patch, AsyncMock, MagicMock
-from src.intelligence.briefing import generate_briefing, generate_persona_briefing
+from asynctest.mock import patch
+from src.intelligence.briefing import (
+    generate_briefing,
+    generate_persona_briefing,
+    stream_briefing,
+)
 
 
 @pytest.mark.asyncio
@@ -19,6 +24,7 @@ async def test_generate_briefing():
         result = await generate_briefing("Orlen")
         assert result.company_overview == "This is a briefing for the company Orlen."
 
+
 @pytest.mark.asyncio
 async def test_generate_persona_briefing():
     """Test that generate_persona_briefing returns a string when given a valid persona name."""
@@ -34,3 +40,8 @@ async def test_generate_persona_briefing():
 
         persona = await generate_persona_briefing("John Doe")
         assert persona.persona_overview == "This is a briefing of the persona John Doe."
+
+
+# TODO: Add unit test for stream_briefing()
+# Tested manually via curl --no-buffer
+# Requires AsyncMock with async context manager support

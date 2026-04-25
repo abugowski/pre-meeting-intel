@@ -1,7 +1,9 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class Settings(BaseSettings):
     anthropic_api_key: str
+    tavily_api_key: str
     app_name: str = "FDE Portfolio"
     debug: bool = False
     briefing_system_prompt: str
@@ -12,5 +14,6 @@ class Settings(BaseSettings):
     briefing_user_technology_prompt: str
 
     model_config = SettingsConfigDict(env_file=".env")
+
 
 settings = Settings()

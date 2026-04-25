@@ -8,7 +8,7 @@ Preparing for a client meeting requires processing large amounts of information,
 
 ## 🚀 Live Demo
 
-**API:** https://pre-meeting-intel.railway.app/health
+**API:** https://pre-meeting-intel-production.up.railway.app/health
 
 ## Architecture
 
@@ -36,7 +36,7 @@ JSON Briefing Response
 ## Example Request
 
 ```bash
-curl -X POST "https://pre-meeting-intel.railway.app/briefing" \
+curl -X POST "https://pre-meeting-intel-production.up.railway.app/briefing" \
   -H "Content-Type: application/json" \
   -d '{
     "company_name": "ACME Corp",
@@ -61,7 +61,7 @@ curl -X POST "https://pre-meeting-intel.railway.app/briefing" \
 ## Streaming Example
 
 ```bash
-curl -X POST "https://pre-meeting-intel.railway.app/briefing/stream" \
+curl -X POST "https://pre-meeting-intel-production.up.railway.app/briefing/stream" \
   -H "Content-Type: application/json" \
   -d '{"company_name": "ACME Corp"}' \
   --no-buffer
@@ -93,7 +93,7 @@ Required environment variables:
 
 Interactive Swagger UI available at:
 - **Local:** `http://localhost:8000/docs`
-- **Production:** https://pre-meeting-intel.railway.app/docs
+- **Production:** https://pre-meeting-intel-production.up.railway.app/docs
 
 > ⚠️ **Note:** Live API requires valid `ANTHROPIC_API_KEY` and `TAVILY_API_KEY`. 
 > The public endpoint demonstrates the API structure — full functionality 

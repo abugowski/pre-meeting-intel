@@ -19,13 +19,12 @@ from src.intelligence.exceptions import APIConnectionError
 from src.api.config import settings
 from dotenv import load_dotenv
 
+load_dotenv()
 # Logur and log configuration
 
 logger.add("logs/app.log", rotation="1 MB", retention="10 days")
 
-
 app = FastAPI(docs_url="/docs", redoc_url="/redoc")
-load_dotenv()
 
 
 @app.get("/health")

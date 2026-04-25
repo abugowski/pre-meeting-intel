@@ -44,3 +44,27 @@ async def test_generate_persona_briefing():
 # TODO: Add unit test for stream_briefing()
 # Tested manually via curl --no-buffer
 # Requires AsyncMock with async context manager support
+
+
+@pytest.mark.asyncio
+async def test_stream_briefing():
+    """Test that stream_briefing retruns a string when given a valid company name as stream"""
+
+    with patch("src.intelligence.briefing.AsyncAnthropic") as mock_anthropic:
+        mock_instance = MagicMock()
+        mock_anthropic.return_value = mock_instance
+
+        # mock_stream
+        mock_stream = AsyncMock()
+        mock_stream.__aenter__.return_value = mock_stream
+        mock_stream.__aexit__.return_value = None
+        mock_stream.text_stream.__aiter__.return_value = iter(
+            ["Orlen ", "is a ", "Polish"]
+        )
+        mock_instance.messages.stream.return_value = mock_stream
+
+        results = []
+        async for chunk in stream_briefing("Orlen"):
+            results.append(chunk)
+
+        assert "".join(results) == "Orlen is a Polish"

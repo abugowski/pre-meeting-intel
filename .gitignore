@@ -16,3 +16,4 @@ src/intelligence/prompts.py
 convert_prompts.py
 .DS_Store
 **/.DS_Store
+test_run.py

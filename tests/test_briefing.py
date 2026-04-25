@@ -1,6 +1,5 @@
 import pytest
 from unittest.mock import patch, AsyncMock, MagicMock
-from asynctest.mock import patch
 from src.intelligence.briefing import (
     generate_briefing,
     generate_persona_briefing,

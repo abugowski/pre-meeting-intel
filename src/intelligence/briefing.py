@@ -1,6 +1,8 @@
 from anthropic import AsyncAnthropic
 from pydantic import BaseModel
+from src.intelligence.search import search_company
 from src.api.config import settings
+
 
 class BriefingResponse(BaseModel):
     """
@@ -15,14 +17,17 @@ class BriefingResponse(BaseModel):
     industry_context: list[str]
     opportunities: list[str]
 
+
 class PersonaBriefingResponse(BaseModel):
     """
     Create a response model for the person briefing generation.
     """
+
     persona_overview: str
     strategic_priorities: list[str]
     talking_points: list[str]
     risk_flags: list[str]
+
 
 async def generate_briefing(
     company_name: str,
@@ -39,12 +44,16 @@ async def generate_briefing(
     # model = "claude-sonnet-4-6"
     model = "claude-haiku-4-5"
 
+    search_results = await search_company(company_name=company_name)
+
     prompt = settings.briefing_user_prompt.format(company_name=company_name)
+    prompt += f"\n\nCurrent information from web search:\n{search_results}"
     if industry:
         prompt += settings.briefing_user_industry_prompt.format(industry=industry)
     if technology_focus:
-        prompt += settings.briefing_user_technology_prompt.format(technology_focus=technology_focus, company_name=company_name)
-    
+        prompt += settings.briefing_user_technology_prompt.format(
+            technology_focus=technology_focus, company_name=company_name
+        )
 
     message = await client.messages.parse(
         model=model,
@@ -60,6 +69,7 @@ async def generate_briefing(
     )
 
     return message.parsed_output
+
 
 async def generate_persona_briefing(
     name: str,
@@ -97,11 +107,12 @@ async def generate_persona_briefing(
     )
     return message.parsed_output
 
+
 async def stream_briefing(
     company_name: str,
     industry: str | None = None,
     technology_focus: str | None = None,
-    ):
+):
     """
     Generate a briefing for the given company name.
 
@@ -116,8 +127,10 @@ async def stream_briefing(
     if industry:
         prompt += settings.briefing_user_industry_prompt.format(industry=industry)
     if technology_focus:
-        prompt += settings.briefing_user_technology_prompt.format(technology_focus=technology_focus, company_name=company_name)
-     
+        prompt += settings.briefing_user_technology_prompt.format(
+            technology_focus=technology_focus, company_name=company_name
+        )
+
     async with client.messages.stream(
         model=model,
         max_tokens=4000,

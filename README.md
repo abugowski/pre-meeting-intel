@@ -29,6 +29,7 @@ JSON Briefing Response
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/health` | API health check |
+| POST | `/company` | Generate basic company profile with country data |
 | POST | `/briefing` | Generate company briefing with target personas |
 | POST | `/persona-briefing` | Generate executive profile for a specific person |
 | POST | `/briefing/stream` | Stream company briefing in real-time |

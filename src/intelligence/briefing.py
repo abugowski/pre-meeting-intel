@@ -2,6 +2,7 @@ from anthropic import AsyncAnthropic
 from pydantic import BaseModel
 from src.intelligence.search import search_company
 from src.api.config import settings
+from src.intelligence.vector_store import search
 
 
 class BriefingResponse(BaseModel):
@@ -44,10 +45,18 @@ async def generate_briefing(
     # model = "claude-sonnet-4-6"
     model = "claude-haiku-4-5"
 
+    vector_search = search(query=company_name, n_results=5)
     search_results = await search_company(company_name=company_name)
 
     prompt = settings.briefing_user_prompt.format(company_name=company_name)
+    if vector_search:
+        prompt += (
+            f"\n\nCurrent information from vedctor database search:\n"
+            + "\n".join(vector_search)
+        )
+
     prompt += f"\n\nCurrent information from web search:\n{search_results}"
+
     if industry:
         prompt += settings.briefing_user_industry_prompt.format(industry=industry)
     if technology_focus:

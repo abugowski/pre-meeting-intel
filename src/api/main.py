@@ -4,6 +4,8 @@ from src.api.schemas import (
     BriefingRequest,
     CompanyRequest,
     CompanyResponse,
+    KnowledgeAddRequest,
+    KnowledgeQueryRequest,
     PersonaBreifingRequest,
 )
 from src.intelligence.models import CompanyProfile
@@ -14,6 +16,7 @@ from src.intelligence.briefing import (
     BriefingResponse,
     PersonaBriefingResponse,
 )
+from src.intelligence.vector_store import add_documents, search
 from loguru import logger
 from src.intelligence.exceptions import APIConnectionError
 from src.api.config import settings
@@ -141,3 +144,39 @@ async def post_stream_briefing(request: BriefingRequest) -> StreamingResponse:
     except Exception as e:
         logger.error(f"Unexpected error: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
+
+
+@app.post("/knowledge/add")
+async def post_add_documents(request: KnowledgeAddRequest):
+    """
+    Add documents to the knowledge base.
+    """
+
+    if not request.documents or not request.ids:
+        raise HTTPException(status_code=400, detail="Documents and IDs cannot be empty")
+    try:
+        add_documents(request.documents, request.ids)
+    except APIConnectionError:
+        raise HTTPException(status_code=503, detail="External API is unavailable")
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+    return {"status": "ok", "added": len(request.documents)}
+
+
+@app.post("/knowledge/query")
+async def post_search(request: KnowledgeQueryRequest):
+    """Search the knowledge base for embedded documents relevant to the query."""
+
+    if request.query == "":
+        raise HTTPException(status_code=400, detail="Query cannot be empty")
+    try:
+        results = search(request.query, request.n_results, request.max_distance)
+    except APIConnectionError:
+        raise HTTPException(status_code=503, detail="External API is unavailable")
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+    return {"results": results}

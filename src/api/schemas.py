@@ -27,8 +27,25 @@ class BriefingRequest(BaseModel):
     industry: str | None = None
     technology_focus: str | None = None
 
+
 class PersonaBreifingRequest(BaseModel):
     """Represents a request to generate a pre-meeting briefing for a person."""
+
     name: str
     position: str | None = None
     bio: str | None = None
+
+
+class KnowledgeAddRequest(BaseModel):
+    """Represents a request to add documents to the knowledge base."""
+
+    documents: list[str]
+    ids: list[str]
+
+
+class KnowledgeQueryRequest(BaseModel):
+    """Represents a request to search the knowledge base."""
+
+    query: str
+    n_results: int = 3
+    max_distance: float = 1.5

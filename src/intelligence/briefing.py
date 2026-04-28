@@ -32,6 +32,7 @@ class PersonaBriefingResponse(BaseModel):
 
 async def generate_briefing(
     company_name: str,
+    chromadb_client,
     industry: str | None = None,
     technology_focus: str | None = None,
 ) -> BriefingResponse:
@@ -45,7 +46,9 @@ async def generate_briefing(
     # model = "claude-sonnet-4-6"
     model = "claude-haiku-4-5"
 
-    vector_search = search(query=company_name, n_results=5)
+    vector_search = search(
+        chromadb_client=chromadb_client, query=company_name, n_results=5
+    )
     search_results = await search_company(company_name=company_name)
 
     prompt = settings.briefing_user_prompt.format(company_name=company_name)

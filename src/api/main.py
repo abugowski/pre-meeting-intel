@@ -21,12 +21,14 @@ from loguru import logger
 from src.intelligence.exceptions import APIConnectionError
 from src.api.config import settings
 from dotenv import load_dotenv
+import chromadb
 
 load_dotenv()
 # Logur and log configuration
 
 logger.add("logs/app.log", rotation="1 MB", retention="10 days")
 
+chromadb_client = chromadb.PersistentClient(path="./data/chroma_db")
 app = FastAPI(docs_url="/docs", redoc_url="/redoc")
 
 
@@ -69,6 +71,7 @@ async def post_briefing(request: BriefingRequest) -> BriefingResponse:
     try:
         briefing = await generate_briefing(
             company_name=request.company_name,
+            chromadb_client=chromadb_client,
             industry=request.industry,
             technology_focus=request.technology_focus,
         )

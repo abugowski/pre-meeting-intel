@@ -20,7 +20,7 @@ async def test_generate_briefing():
         )
         mock_instance.messages.parse = AsyncMock(return_value=mock_response)
 
-        result = await generate_briefing("Orlen")
+        result = await generate_briefing("Orlen", chromadb_client=MagicMock())
         assert result.company_overview == "This is a briefing for the company Orlen."
 
 

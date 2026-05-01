@@ -99,3 +99,11 @@ Interactive Swagger UI available at:
 > ⚠️ **Note:** Live API requires valid `ANTHROPIC_API_KEY` and `TAVILY_API_KEY`. 
 > The public endpoint demonstrates the API structure — full functionality 
 > requires your own API keys configured locally.
+
+## Frontend
+
+A simple HTML interface is available when running locally.
+Access at `http://localhost:8000/` after starting the server.
+
+> ⚠️ The live demo on Railway shows the API structure only.
+> Full functionality requires local setup with valid API keys.

@@ -49,3 +49,9 @@ class KnowledgeQueryRequest(BaseModel):
     query: str
     n_results: int = 3
     max_distance: float = 1.5
+
+
+class AgentBriefingRequest(BaseModel):
+    """Represents a request to generate a pre-meeting briefing for an agent."""
+
+    query: str

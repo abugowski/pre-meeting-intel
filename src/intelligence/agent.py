@@ -97,7 +97,6 @@ async def run_agent(query: str, chromadb_client) -> str:
 
         for tool_request in tool_requests:
             if tool_request.name == "search_company":
-                print("Company Name:", tool_request.input["company_name"])
                 results = await search_company(tool_request.input["company_name"])
             elif tool_request.name == "search_docs":
                 results = search(chromadb_client, tool_request.input["query"])

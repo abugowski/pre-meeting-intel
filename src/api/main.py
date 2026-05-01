@@ -7,6 +7,7 @@ from src.api.schemas import (
     KnowledgeAddRequest,
     KnowledgeQueryRequest,
     PersonaBreifingRequest,
+    AgentBriefingRequest,
 )
 from src.intelligence.models import CompanyProfile
 from src.intelligence.briefing import (
@@ -17,6 +18,7 @@ from src.intelligence.briefing import (
     PersonaBriefingResponse,
 )
 from src.intelligence.vector_store import add_documents, search
+from src.intelligence.agent import run_agent
 from loguru import logger
 from src.intelligence.exceptions import APIConnectionError
 from src.api.config import settings
@@ -176,6 +178,23 @@ async def post_search(request: KnowledgeQueryRequest):
         raise HTTPException(status_code=400, detail="Query cannot be empty")
     try:
         results = search(request.query, request.n_results, request.max_distance)
+    except APIConnectionError:
+        raise HTTPException(status_code=503, detail="External API is unavailable")
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+    return {"results": results}
+
+
+@app.post("/agent/briefing")
+async def post_agent_briefing(request: AgentBriefingRequest):
+    """Generate a briefing using the agent based on the provided query."""
+
+    if request.query == "":
+        raise HTTPException(status_code=400, detail="Query cannot be empty")
+    try:
+        results = await run_agent(request.query, chromadb_client)
     except APIConnectionError:
         raise HTTPException(status_code=503, detail="External API is unavailable")
     except Exception as e:

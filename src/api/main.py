@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from starlette.responses import StreamingResponse
 from src.api.schemas import (
     BriefingRequest,
@@ -202,3 +203,6 @@ async def post_agent_briefing(request: AgentBriefingRequest):
         raise HTTPException(status_code=500, detail="Internal server error")
 
     return {"results": results}
+
+
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

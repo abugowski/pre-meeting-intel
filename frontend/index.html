@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pre-meeting-intel</title>
+</head>
+<body>
+    <h1>Pre-Meeting Intelligence</h1>
+
+    <input type="text" id="company" placeholder="Company name...">
+    <button onclick="generateBriefing()">Generate Briefing</button>
+
+    <div id="output"></div>
+
+    <script>
+        async function generateBriefing() {
+            const company = document.getElementById('company').value;
+            const output = document.getElementById('output');
+            
+            output.textContent = "Loading...";
+
+            const response = await fetch("/agent/briefing", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({query: company})
+            });
+
+            const data = await response.json();
+            output.textContent = data.results;
+        }
+    </script>
+</body>
+</html>

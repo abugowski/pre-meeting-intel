@@ -44,7 +44,7 @@ search_docs_schema = ToolParam(
     }
 )
 
-get_company_profile_schema = ToolParam(
+generate_briefing_schema = ToolParam(
     {
         "name": "generate_briefing",
         "description": "Generate a comprehensive pre-meeting intelligence briefing for a company. Use this tool when you need a full structured briefing covering company overview, strategic priorities, company values, target personas, current challenges, industry context, and opportunities. This tool combines web search and internal knowledge base to produce an actionable briefing for enterprise sales executives.",
@@ -69,7 +69,7 @@ get_company_profile_schema = ToolParam(
     }
 )
 
-tools = [search_web_schema, search_docs_schema, get_company_profile_schema]
+tools = [search_web_schema, search_docs_schema, generate_briefing_schema]
 
 
 async def run_agent(query: str, chromadb_client) -> str:

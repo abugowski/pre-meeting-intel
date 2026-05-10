@@ -8,7 +8,8 @@ Preparing for a client meeting requires processing large amounts of information,
 
 ## 🚀 Live Demo
 
-**API:** https://pre-meeting-intel-production.up.railway.app/health
+API is currently running locally only.
+Full deployment coming in Month 3.
 
 ## Architecture
 
@@ -92,13 +93,10 @@ Required environment variables:
 
 ## API Docs
 
-Interactive Swagger UI available at:
-- **Local:** `http://localhost:8000/docs`
-- **Production:** https://pre-meeting-intel-production.up.railway.app/docs
+Interactive Swagger UI available at `http://localhost:8000/docs` when running locally.
 
-> ⚠️ **Note:** Live API requires valid `ANTHROPIC_API_KEY` and `TAVILY_API_KEY`. 
-> The public endpoint demonstrates the API structure — full functionality 
-> requires your own API keys configured locally.
+> ⚠️ **Note:** Live API requires valid `ANTHROPIC_API_KEY` and `TAVILY_API_KEY`.
+> Full functionality requires local setup with valid API keys.
 
 ## Frontend
 

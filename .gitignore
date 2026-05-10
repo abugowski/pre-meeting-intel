@@ -18,3 +18,5 @@ convert_prompts.py
 **/.DS_Store
 test_run.py
 data/
+exercises.py
+agent_exercise.py

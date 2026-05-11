@@ -20,14 +20,22 @@
             
             output.textContent = "Loading...";
 
-            const response = await fetch("/agent/briefing", {
+            const response = await fetch("/briefing/stream", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({query: company})
+                // Zmień body - /briefing/stream przyjmuje company_name nie query
+                body: JSON.stringify({company_name: company})
             });
 
-            const data = await response.json();
-            output.textContent = data.results;
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            output.textContent = "";
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                output.textContent += decoder.decode(value);
+            }
         }
     </script>
 </body>

@@ -143,7 +143,7 @@ async def post_stream_briefing(request: BriefingRequest) -> StreamingResponse:
                 industry=request.industry,
                 technology_focus=request.technology_focus,
             ),
-            media_type="text/plain",
+            media_type="text/event-stream",
         )
     except APIConnectionError:
         raise HTTPException(status_code=503, detail="External API is unavailable")

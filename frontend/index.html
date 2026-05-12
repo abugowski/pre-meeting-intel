@@ -117,24 +117,42 @@
         async function generateBriefing() {
             const company = document.getElementById('company').value;
             const output = document.getElementById('output');
-            
+            const button = document.querySelector('button');
+
+            if (!company) {
+                output.textContent = "Please enter a company name.";
+                return;
+            }
+
+            button.textContent = "Generating...";
+            button.disabled = true;
             output.textContent = "Loading...";
 
-            const response = await fetch("/briefing/stream", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                // Zmień body - /briefing/stream przyjmuje company_name nie query
-                body: JSON.stringify({company_name: company})
-            });
+            try {
+                const response = await fetch("/briefing/stream", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({company_name: company})
+                });
+            
+                if (!response.ok) {
+                    const error = await response.json();
+                    output.textContent = `Error: ${error.detail}`;
+                    return;
+                }
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            output.textContent = "";
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                output.textContent = "";
 
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                output.textContent += decoder.decode(value);
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    output.textContent += decoder.decode(value);
+                }
+            } finally {
+                button.textContent = "Generate Briefing";
+                button.disabled = false;
             }
         }
     </script>

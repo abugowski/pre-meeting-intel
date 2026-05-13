@@ -20,3 +20,4 @@ test_run.py
 data/
 exercises.py
 agent_exercise.py
+langgraph_exercise.py
